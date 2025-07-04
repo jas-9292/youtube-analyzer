@@ -157,6 +157,7 @@ if st.button("결과 조회") and api_key and channel_ids:
                         </div>
                     """, unsafe_allow_html=True)
 
+                st.markdown("#### 🚀 일자 별 영상")
                 for _, row in df.iterrows():
                     st.markdown(f"""
                         <div style='display:flex; align-items:flex-start; margin-bottom:16px; background-color:#fafafa; padding:10px; border-radius:8px;'>

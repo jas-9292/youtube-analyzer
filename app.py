@@ -87,9 +87,9 @@ st.set_page_config(layout="wide")
 
 # ✔️ 앱 메인 제목
 st.markdown(f"""
-    <h2 style='text-align: left; color: {MAIN_COLOR};'>
+    <h4 style='text-align: left; color: {MAIN_COLOR};'>
         📊 YouTube 데이터 조회 (Ver.1)
-    </h2>
+    </h4>
 """, unsafe_allow_html=True)
 
 api_key = st.text_input("🔑 YouTube API 키", type="password")

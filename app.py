@@ -204,12 +204,18 @@ if st.button("결과 조회") and api_key and channel_ids:
             except Exception as e:
                 st.error(f"❌ 오류 발생: {e}")
 
-    # 🔽 통합 다운로드 버튼
-    if all_downloads:
-        st.markdown("---")
-        st.markdown("### 📂 모든 채널 통합 엑셀 다운로드")
-        combined_io = io.BytesIO()
-        with pd.ExcelWriter(combined_io, engine='openpyxl') as writer:
-            for sheet_name, df_sheet in all_downloads.items():
-                df_sheet.to_excel(writer, sheet_name=sheet_name[:31], index=False)
-        st.download_button("📥 통합 다운로드 (모든 채널)", data=combined_io.getvalue(), file_name="통합_유튜브_분석결과.xlsx")
+  # 🔽 통합 다운로드 버튼
+if 'all_downloads' in st.session_state and st.session_state.all_downloads:
+    st.markdown("---")
+    st.markdown("### 📂 모든 채널 통합 엑셀 다운로드")
+
+    combined_io = io.BytesIO()
+    with pd.ExcelWriter(combined_io, engine='openpyxl') as writer:
+        for sheet_name, df_sheet in st.session_state.all_downloads.items():
+            df_sheet.to_excel(writer, sheet_name=sheet_name[:31], index=False)
+
+    st.download_button(
+        "📥 통합 다운로드 (모든 채널)",
+        data=combined_io.getvalue(),
+        file_name="통합_유튜브_분석결과.xlsx"
+    )

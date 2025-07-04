@@ -142,7 +142,6 @@ if st.button("결과 조회") and api_key and channel_ids:
                 st.markdown("#### 👁️ 월별 총 조회수")
                 st.bar_chart(monthly[['총 조회수']])
 
-                # 🔥 조회수 TOP5
                 st.markdown("#### 🏆 조회수 TOP 5")
                 top5 = df.sort_values(by='viewCount', ascending=False).head(5)
                 for i, row in enumerate(top5.itertuples(), 1):

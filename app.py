@@ -74,7 +74,7 @@ def get_video_views(youtube, video_ids):
 # ✔️ UI 시작
 st.set_page_config(layout="wide")
 st.markdown("""
-    <h2 style='text-align: left; color: #000000;'>
+    <h2 style='text-align: left; color: #1E90FF;'>
         📊 YouTube 데이터 조회 Ver.1
     </h2>
 """, unsafe_allow_html=True)

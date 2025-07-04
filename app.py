@@ -23,6 +23,13 @@ if input_pass != PASSWORD:
     st.warning("올바른 비밀번호를 입력하세요.")
     st.stop()
 
+# ✅ 세션 상태 변수 초기화
+if 'all_downloads' not in st.session_state:
+    st.session_state.all_downloads = {}
+
+if 'has_searched' not in st.session_state:
+    st.session_state.has_searched = False
+
 # ✔️ YouTube API 연결
 def get_youtube_service(api_key):
     return build("youtube", "v3", developerKey=api_key)
@@ -100,9 +107,11 @@ start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
 if st.button("결과 조회") and api_key and channel_ids:
-    youtube = get_youtube_service(api_key)
+    st.session_state.has_searched = True
     st.session_state.all_downloads = {}
-    
+
+if st.session_state.has_searched and api_key and channel_ids:
+    youtube = get_youtube_service(api_key)
     tabs = st.tabs([f"📺 {get_channel_title(youtube, cid)}" for cid in channel_ids])
 
     for tab, channel_id in zip(tabs, channel_ids):

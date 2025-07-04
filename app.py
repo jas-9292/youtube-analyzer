@@ -105,7 +105,7 @@ if 'all_downloads' not in st.session_state:
 
 if st.button("결과 조회") and api_key and channel_ids:
     youtube = get_youtube_service(api_key)
-    st.session_state.all_downloads.clear()
+    st.session_state.all_downloads = {}
     
     tabs = st.tabs([f"📺 {get_channel_title(youtube, cid)}" for cid in channel_ids])
 

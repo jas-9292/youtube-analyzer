@@ -106,27 +106,7 @@ channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
-# ✅ 버튼 정렬: 결과 조회, 채널별 다운로드, 통합 다운로드
-col1, col2, col3 = st.columns([1, 1, 1])
-
-with col1:
-    run_clicked = st.button("결과 조회")
-
-with col2:
-    if st.session_state.latest_download_df is not None:
-        towrite = io.BytesIO()
-        st.session_state.latest_download_df.to_excel(towrite, index=False, engine='openpyxl')
-        st.download_button("📥 엑셀 다운로드 (채널별)", data=towrite.getvalue(), file_name="채널_분석결과.xlsx")
-
-with col3:
-    if st.session_state.all_downloads:
-        combined_io = io.BytesIO()
-        with pd.ExcelWriter(combined_io, engine='openpyxl') as writer:
-            for sheet_name, df_sheet in st.session_state.all_downloads.items():
-                df_sheet.to_excel(writer, sheet_name=sheet_name[:31], index=False)
-        st.download_button("📥 통합 다운로드 (모든 채널)", data=combined_io.getvalue(), file_name="통합_유튜브_분석결과.xlsx")
-
-if run_clicked and api_key and channel_ids:
+if st.button("결과 조회") and api_key and channel_ids:
     st.session_state.has_searched = True
     st.session_state.all_downloads = {}
 

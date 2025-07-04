@@ -144,6 +144,11 @@ if st.session_state.has_searched and api_key and channel_ids:
                 st.markdown(f"**👁️ 총 조회수:** {total_views:,}회")
                 st.markdown(f"**📊 평균 조회수:** {int(avg_views):,}회")
 
+                # ✅ div를 활용한 구분선
+                st.markdown("""
+                <div style="border-top: 1px solid #E0E0E0; margin: 25px 0;"></div>
+                """, unsafe_allow_html=True)
+                
                 # 월별 집계
                 df['월'] = df['published_at'].dt.to_period('M').astype(str)
                 monthly = df.groupby('월').agg({
@@ -157,11 +162,6 @@ if st.session_state.has_searched and api_key and channel_ids:
                 monthly_display['업로드 수'] = monthly_display['업로드 수'].map('{:,}'.format)
                 monthly_display['총 조회수'] = monthly_display['총 조회수'].map('{:,}'.format)
                 monthly_display['평균 조회수'] = monthly_display['평균 조회수'].map('{:,}'.format)
-
-                # ✅ div를 활용한 구분선
-                st.markdown("""
-                <div style="border-top: 1px solid #E0E0E0; margin: 25px 0;"></div>
-                """, unsafe_allow_html=True)
                 
                 st.markdown("##### 📅 월별 요약 통계")
                 st.dataframe(monthly_display)

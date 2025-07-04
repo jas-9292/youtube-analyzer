@@ -157,6 +157,8 @@ if st.session_state.has_searched and api_key and channel_ids:
                 monthly_display['업로드 수'] = monthly_display['업로드 수'].map('{:,}'.format)
                 monthly_display['총 조회수'] = monthly_display['총 조회수'].map('{:,}'.format)
                 monthly_display['평균 조회수'] = monthly_display['평균 조회수'].map('{:,}'.format)
+
+                st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
                 
                 st.markdown("##### 📅 월별 요약 통계")
                 st.dataframe(monthly_display)

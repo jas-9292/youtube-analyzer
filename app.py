@@ -3,6 +3,7 @@ from googleapiclient.discovery import build
 from datetime import datetime
 import pandas as pd
 import io
+from openpyxl import Workbook
 
 # ✔️ 비밀번호 보호
 PASSWORD = "isawesome^1"
@@ -85,6 +86,8 @@ channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
+all_downloads = {}  # 🔄 통합 다운로드용 딕셔너리 초기화
+
 if st.button("결과 조회") and api_key and channel_ids:
     youtube = get_youtube_service(api_key)
     tabs = st.tabs([f"📺 {get_channel_title(youtube, cid)}" for cid in channel_ids])
@@ -142,6 +145,7 @@ if st.button("결과 조회") and api_key and channel_ids:
                 st.markdown("#### 👁️ 월별 총 조회수")
                 st.bar_chart(monthly[['총 조회수']])
 
+                # 🔥 조회수 TOP5
                 st.markdown("#### 🏆 조회수 TOP 5")
                 top5 = df.sort_values(by='viewCount', ascending=False).head(5)
                 for i, row in enumerate(top5.itertuples(), 1):
@@ -177,5 +181,17 @@ if st.button("결과 조회") and api_key and channel_ids:
                 download_df.to_excel(towrite, index=False, engine='openpyxl')
                 st.download_button(f"📥 엑셀 다운로드 ({channel_title})", data=towrite.getvalue(), file_name=f"{channel_title}_분석결과.xlsx")
 
+                all_downloads[channel_title] = download_df.copy()  # 🔄 통합 다운로드용 저장
+
             except Exception as e:
                 st.error(f"❌ 오류 발생: {e}")
+
+    # 🔽 통합 다운로드 버튼
+    if all_downloads:
+        st.markdown("---")
+        st.markdown("### 📂 모든 채널 통합 엑셀 다운로드")
+        combined_io = io.BytesIO()
+        with pd.ExcelWriter(combined_io, engine='openpyxl') as writer:
+            for sheet_name, df_sheet in all_downloads.items():
+                df_sheet.to_excel(writer, sheet_name=sheet_name[:31], index=False)
+        st.download_button("📥 통합 다운로드 (모든 채널)", data=combined_io.getvalue(), file_name="통합_유튜브_분석결과.xlsx")

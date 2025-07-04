@@ -59,27 +59,7 @@ def get_videos(youtube, playlist_id):
 def get_video_views(youtube, video_ids):
     stats = []
     for i in range(0, len(video_ids), 50):
-        response = youtube.videos().list(
-            part="statistics",
-            id=','.join(video_ids[i:i+50])
-        ).execute()
-        for item in response['items']:
-            stats.append({
-                "video_id": item['id'],
-                "viewCount": int(item['statistics'].get('viewCount', 0))
-            })
-    return stats
-
-# ✔️ UI 시작
-st.set_page_config(layout="wide")
-st.markdown("""
-    <h2 style='text-align: left; color: #000000;'>
-        📊 YouTube 데이터 조회 Tool V.1
-    </h2>
-""", unsafe_allow_html=True)
-
-api_key = st.text_input("🔑 YouTube API 키", type="password")
-channel_ids_raw = st.text_area("💼 채널 ID 여러 개 입력 (줄만보기)")
+        response = youtu력)")
 channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()]
 
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))

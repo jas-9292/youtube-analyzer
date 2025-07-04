@@ -74,7 +74,7 @@ def get_video_views(youtube, video_ids):
 st.set_page_config(layout="wide")
 st.markdown("""
     <h2 style='text-align: left; color: #000000;'>
-        📊 YouTube 데이터 조회 Tool V.1
+        📊 YouTube 데이터 조회 Ver.1
     </h2>
 """, unsafe_allow_html=True)
 
@@ -85,7 +85,7 @@ channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
-if st.button("분석 시작") and api_key and channel_ids:
+if st.button("결과 조회") and api_key and channel_ids:
     youtube = get_youtube_service(api_key)
     tabs = st.tabs([f"📺 {get_channel_title(youtube, cid)}" for cid in channel_ids])
 
@@ -119,7 +119,7 @@ if st.button("분석 시작") and api_key and channel_ids:
                 st.markdown(f"**👁️ 총 조회수:** {total_views:,}회")
                 st.markdown(f"**📊 평균 조회수:** {int(avg_views):,}회")
 
-                # 월별 집계 (평균 조회수 포함)
+                # 월별 집계
                 df['월'] = df['published_at'].dt.to_period('M').astype(str)
                 monthly = df.groupby('월').agg({
                     'video_id': 'count',
@@ -128,7 +128,6 @@ if st.button("분석 시작") and api_key and channel_ids:
                 monthly.columns = ['업로드 수', '총 조회수', '평균 조회수']
                 monthly = monthly.round(0).astype(int)
 
-                # 표시용: 천 단위 콤마 추가
                 monthly_display = monthly.copy()
                 monthly_display['업로드 수'] = monthly_display['업로드 수'].map('{:,}'.format)
                 monthly_display['총 조회수'] = monthly_display['총 조회수'].map('{:,}'.format)
@@ -142,6 +141,22 @@ if st.button("분석 시작") and api_key and channel_ids:
 
                 st.markdown("#### 👁️ 월별 총 조회수")
                 st.bar_chart(monthly[['총 조회수']])
+
+                # 🔥 조회수 TOP5
+                st.markdown("#### 🏆 조회수 TOP 5")
+                top5 = df.sort_values(by='viewCount', ascending=False).head(5)
+                for i, row in enumerate(top5.itertuples(), 1):
+                    st.markdown(f"""
+                        <div style='display:flex; align-items:flex-start; margin-bottom:12px; background-color:#fdfdfd; padding:8px; border-radius:6px;'>
+                            <img src="{row.thumbnail}" style="width:100px; border-radius:4px; margin-right:12px;">
+                            <div style="max-width: 75%;">
+                                <a href="{row.video_url}" target="_blank" style="text-decoration:none;">
+                                    <h5 style="margin:0; color:#333;">[{i}] {row.title}</h5>
+                                </a>
+                                <p style="margin:4px 0 0; color:#666;">📅 {row.published_at.date()} | 👁️ {row.viewCount:,}회</p>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
 
                 for _, row in df.iterrows():
                     st.markdown(f"""
@@ -164,6 +179,3 @@ if st.button("분석 시작") and api_key and channel_ids:
 
             except Exception as e:
                 st.error(f"❌ 오류 발생: {e}")
-
-            except Exception as e:
-                st.error(f"❌ 오류 발생: {e}")    

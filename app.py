@@ -59,7 +59,7 @@ def get_videos(youtube, playlist_id):
 def get_video_views(youtube, video_ids):
     stats = []
     for i in range(0, len(video_ids), 50):
-        response = youtu력)")
+        response = youtube)")
 channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()]
 
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))

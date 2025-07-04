@@ -158,10 +158,10 @@ if st.session_state.has_searched and api_key and channel_ids:
                 monthly_display['총 조회수'] = monthly_display['총 조회수'].map('{:,}'.format)
                 monthly_display['평균 조회수'] = monthly_display['평균 조회수'].map('{:,}'.format)
 
-                # ✅ 희미한 구분선 넣기
-                st.markdown("""
-                <hr style="border: none; height: 1px; background-color: #E0E0E0; margin: 20px 0;">
-                """, unsafe_allow_html=True)
+# ✅ 여기 구분선 추가!
+st.markdown("""
+    <hr style="border: none; height: 1px; background-color: #E0E0E0; margin: 20px 0;">
+""", unsafe_allow_html=True)
                 
                 st.markdown("##### 📅 월별 요약 통계")
                 st.dataframe(monthly_display)

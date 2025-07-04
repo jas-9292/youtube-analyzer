@@ -5,6 +5,17 @@ import pandas as pd
 import io
 from openpyxl import Workbook
 
+# ✔️ 메인 색상
+MAIN_COLOR = "#1E90FF"
+
+# ✔️ UI 설정
+st.set_page_config(layout="wide")
+
+# ✔️ 로그인 타이틀
+st.markdown(f"""
+    <h1 style='text-align: center; color: {MAIN_COLOR};'>YouTube Manager</h1>
+""", unsafe_allow_html=True)
+
 # ✔️ 비밀번호 보호
 PASSWORD = "isawesome^1"
 input_pass = st.text_input("🔐 접속 비밀번호를 입력하세요", type="password")
@@ -74,7 +85,7 @@ def get_video_views(youtube, video_ids):
 # ✔️ UI 시작
 st.set_page_config(layout="wide")
 st.markdown("""
-    <h2 style='text-align: left; color: #1E90FF;'>
+    <h2 style='text-align: left; color: {MAIN_COLOR};'>
         📊 YouTube 데이터 조회 Ver.1
     </h2>
 """, unsafe_allow_html=True)
@@ -86,10 +97,14 @@ channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
-all_downloads = {}  # 🔄 통합 다운로드용 딕셔너리 초기화
+# 세션 상태 초기화
+if 'all_downloads' not in st.session_state:
+    st.session_state.all_downloads = {}
 
 if st.button("결과 조회") and api_key and channel_ids:
     youtube = get_youtube_service(api_key)
+    st.session_state.all_downloads.clear()
+    
     tabs = st.tabs([f"📺 {get_channel_title(youtube, cid)}" for cid in channel_ids])
 
     for tab, channel_id in zip(tabs, channel_ids):
@@ -181,7 +196,8 @@ if st.button("결과 조회") and api_key and channel_ids:
                 download_df.to_excel(towrite, index=False, engine='openpyxl')
                 st.download_button(f"📥 엑셀 다운로드 ({channel_title})", data=towrite.getvalue(), file_name=f"{channel_title}_분석결과.xlsx")
 
-                all_downloads[channel_title] = download_df.copy()  # 🔄 통합 다운로드용 저장
+                # 🔄 세션에 저장 (초기화 방지)
+                st.session_state.all_downloads[channel_title] = download_df.copy()
 
             except Exception as e:
                 st.error(f"❌ 오류 발생: {e}")

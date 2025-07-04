@@ -99,10 +99,6 @@ channel_ids = [cid.strip() for cid in channel_ids_raw.split('\n') if cid.strip()
 start_date = st.date_input("📅 시작 날짜", datetime(2024, 1, 1))
 end_date = st.date_input("📅 종료 날짜", datetime.today())
 
-# 세션 상태 초기화
-if 'all_downloads' not in st.session_state:
-    st.session_state.all_downloads = {}
-
 if st.button("결과 조회") and api_key and channel_ids:
     youtube = get_youtube_service(api_key)
     st.session_state.all_downloads = {}

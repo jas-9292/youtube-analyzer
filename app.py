@@ -158,17 +158,17 @@ if st.session_state.has_searched and api_key and channel_ids:
                 monthly_display['총 조회수'] = monthly_display['총 조회수'].map('{:,}'.format)
                 monthly_display['평균 조회수'] = monthly_display['평균 조회수'].map('{:,}'.format)
                 
-                st.markdown("##### 📅 월별 요약 통계")
+                st.markdown("#### 📅 월별 요약 통계")
                 st.dataframe(monthly_display)
 
-                st.markdown("##### 📈 월별 업로드 수")
+                st.markdown("#### 📈 월별 업로드 수")
                 st.bar_chart(monthly[['업로드 수']])
 
-                st.markdown("##### 👁️ 월별 총 조회수")
+                st.markdown("#### 👁️ 월별 총 조회수")
                 st.bar_chart(monthly[['총 조회수']])
 
                 # 🔥 조회수 TOP5
-                st.markdown("##### 🏆 조회수 TOP 5")
+                st.markdown("#### 🏆 조회수 TOP 5")
                 top5 = df.sort_values(by='viewCount', ascending=False).head(5)
                 for i, row in enumerate(top5.itertuples(), 1):
                     st.markdown(f"""
@@ -183,7 +183,7 @@ if st.session_state.has_searched and api_key and channel_ids:
                         </div>
                     """, unsafe_allow_html=True)
 
-                st.markdown("##### 🚀 일자 별 영상")
+                st.markdown("#### 🚀 일자 별 영상")
                 for _, row in df.iterrows():
                     st.markdown(f"""
                         <div style='display:flex; align-items:flex-start; margin-bottom:16px; background-color:#fafafa; padding:10px; border-radius:8px;'>
@@ -212,7 +212,7 @@ if st.session_state.has_searched and api_key and channel_ids:
   # 🔽 통합 다운로드 버튼
 if 'all_downloads' in st.session_state and st.session_state.all_downloads:
     st.markdown("---")
-    st.markdown("##### 📂 모든 채널 통합 엑셀 다운로드")
+    st.markdown("#### 📂 모든 채널 통합 엑셀 다운로드")
 
     combined_io = io.BytesIO()
     with pd.ExcelWriter(combined_io, engine='openpyxl') as writer:

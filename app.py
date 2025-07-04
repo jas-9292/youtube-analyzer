@@ -143,11 +143,6 @@ if st.session_state.has_searched and api_key and channel_ids:
                 st.markdown(f"**✅ 업로드 수:** {upload_count}개")
                 st.markdown(f"**👁️ 총 조회수:** {total_views:,}회")
                 st.markdown(f"**📊 평균 조회수:** {int(avg_views):,}회")
-
-                # ✅ div를 활용한 구분선
-                st.markdown("""
-                <div style="border-top: 1px solid #E0E0E0; margin: 25px 0;"></div>
-                """, unsafe_allow_html=True)
                 
                 # 월별 집계
                 df['월'] = df['published_at'].dt.to_period('M').astype(str)
